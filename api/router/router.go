@@ -20,12 +20,13 @@ func router() *gin.Engine {
 
   r.GET("/", func(c *gin.Context) {
     c.JSON(http.StatusOK, gin.H{
-        "message": "hello world",
+        "message": "this is api for time search spotify",
     })
   })
 
-  r.GET("insert", handler.SaveTrack)
- 
+  r.GET("/track", handler.SaveTrack)
+  r.GET("/playlist", handler.SavePlayList)
+  r.GET("/search", handler.GetTrack)
   return r
 }
 

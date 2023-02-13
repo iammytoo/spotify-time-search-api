@@ -1,12 +1,10 @@
-package main
+package spotify
 
 import (
 	"context"
-	"fmt"
 	"log"
 	"os"
 
-	"github.com/joho/godotenv"
 	"github.com/mirito333/spotify-time-search-api/api/model"
 	spotifyauth "github.com/zmb3/spotify/v2/auth"
 
@@ -53,7 +51,6 @@ func (s *Session) GetTrackInfo(id string) model.Track {
 
 func (s *Session) GetPlaylist(id string) (model.PlayList, []model.Track) {
 	playlist, err := s.client.GetPlaylist(s.ctx, spotify.ID(id))
-	playlistInfo := model.PlayList{Name: playlist.Name, Key: playlist.ID.String(), IsFetched: true}
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -63,15 +60,5 @@ func (s *Session) GetPlaylist(id string) (model.PlayList, []model.Track) {
 		track := model.Track{Name: t.Track.Name, Key: t.Track.ID.String(), Duration: t.Track.Duration, Times: t.Track.Popularity}
 		tracks = append(tracks, track)
 	}
-	return playlistInfo, tracks
-}
-func main() {
-	godotenv.Load(".env")
-	Init()
-	session := GetSession()
-	list, tracks := session.GetPlaylist("37i9dQZF1DXayDMsJG9ZBv")
-	fmt.Println(list.Name + "," + list.Key)
-	for _, t := range tracks {
-		fmt.Println(t.Name, t.Key, t.Duration, t.Times)
-	}
+	return model.PlayList{Name: playlist.Name, Key: playlist.ID.String(), IsFetched: true}, tracks
 }
