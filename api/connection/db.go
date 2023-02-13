@@ -5,8 +5,6 @@ import (
 
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/mysql"
-	"github.com/joho/godotenv"
-	"github.com/mirito333/spotify-time-search-api/api/model"
 )
 
 var (
@@ -16,18 +14,11 @@ var (
 
 // DB初期化
 func Init() {
-
-	// 環境変数取得
-	godotenv.Load(".env")
-
-	// DB接続
 	db, err = gorm.Open("mysql", os.Getenv("CONNECT"))
 
 	if err != nil {
 		panic(err)
 	}
-	
-	db.AutoMigrate(&model.PlayList{},&model.Track{})
 }
 
 func GetDB() *gorm.DB {

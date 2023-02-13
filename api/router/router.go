@@ -7,14 +7,13 @@ import (
 	"github.com/mirito333/spotify-time-search-api/api/handler"
 )
 
-// 初期化
 func Init() {
   r := router()
  
   r.Run(":3000")
 }
  
-// ルーティング
+
 func router() *gin.Engine {
   r := gin.Default()
   r.Use(CORS())
@@ -29,8 +28,8 @@ func router() *gin.Engine {
  
   return r
 }
- 
-// CORS
+
+
 func CORS() gin.HandlerFunc {
   return func(c *gin.Context) {
     c.Writer.Header().Set("Access-Control-Allow-Origin", "*")
