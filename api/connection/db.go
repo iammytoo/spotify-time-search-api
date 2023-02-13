@@ -15,7 +15,7 @@ func Init() {
 	DBMS := "mysql"
 	USER := "user"
 	PASS := "password"
-	PROTOCOL := "tcp(localhost:3306)"
+	PROTOCOL := "tcp(db:3306)"
 	DBNAME := "db"
 	CONNECT := USER + ":" + PASS + "@" + PROTOCOL + "/" + DBNAME + "?charset=utf8mb4&parseTime=true"
 	db, err = gorm.Open(DBMS, CONNECT)
