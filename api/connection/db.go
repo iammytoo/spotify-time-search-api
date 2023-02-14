@@ -24,7 +24,12 @@ func Init() {
 		panic(err)
 	}
 
-	db.AutoMigrate(&model.PlayList{},&model.Track{})
+	db.AutoMigrate(&model.PlayList{},
+		&model.Track{},
+		&model.Artist{},
+		&model.Genre{},
+		&model.ArtistGenre{},
+		&model.TrackArtist{})
 }
 
 func GetDB() *gorm.DB {
