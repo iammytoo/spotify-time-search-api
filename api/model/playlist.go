@@ -6,6 +6,6 @@ type PlayList struct {
 	gorm.Model
 
 	Name      string
-	Key       string
+	Key       string `gorm:"unique"`
 	IsFetched bool
 }

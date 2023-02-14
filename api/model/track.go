@@ -6,7 +6,7 @@ type Track struct {
 	gorm.Model
 
 	Name     string
-	Key      string
+	Key      string `gorm:"unique"`
 	Duration int
 	Times    int
 }

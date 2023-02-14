@@ -15,7 +15,7 @@ func SaveTrack(c *gin.Context) {
 	db := connection.GetDB()
 	session := spotify.GetSession()
 	track := session.GetTrackInfo(trackId)
-	db.Create(&track)
+	db.Save(&track)
 	c.JSON(200, track)
 }
 
@@ -23,10 +23,10 @@ func SavePlayList(c *gin.Context) {
 	trackId := c.Query("id")
 	db := connection.GetDB()
 	session := spotify.GetSession()
-	playlist,track := session.GetPlaylist(trackId)
-	db.Create(&playlist)
-	for _, t := range track{
-		db.Create(&t)
+	playlist, track := session.GetPlaylist(trackId)
+	db.Save(&playlist)
+	for _, t := range track {
+		db.Save(&t)
 	}
 	c.JSON(200, track)
 }
