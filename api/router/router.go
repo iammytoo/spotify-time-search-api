@@ -10,7 +10,7 @@ import (
 func Init() {
 	r := router()
 
-	r.Run(":3000")
+	r.Run(":3003")
 }
 
 func router() *gin.Engine {
@@ -26,7 +26,7 @@ func router() *gin.Engine {
 	r.GET("/track", handler.SaveTrack)
 	r.GET("/playlist", handler.SavePlayList)
 	r.GET("/search", handler.GetTrack)
-	r.GET("/search_between", handler.GetTrackBetween)
+	
 	return r
 }
 
