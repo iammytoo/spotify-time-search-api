@@ -10,7 +10,7 @@ import (
 func Init() {
 	r := router()
 
-	r.Run(":3003")
+	r.Run(":3000")
 }
 
 func router() *gin.Engine {
