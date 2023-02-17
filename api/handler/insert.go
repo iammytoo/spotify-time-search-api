@@ -23,15 +23,19 @@ func SaveTrack(c *gin.Context) {
 }
 
 func SavePlayList(c *gin.Context) {
-	trackId := c.Query("id")
+	trackIds := c.QueryArray("id")
 	db := connection.GetDB()
 	session := spotify.GetSession()
-	playlist, trackDatas := session.GetPlaylist(trackId)
-	db.Save(&playlist)
-	for _, t := range trackDatas {
-		saveTrackData(t,db)
+	trackDataRes := []model.TrackData{}
+	for _, trackId := range trackIds {
+		playlist, trackDatas := session.GetPlaylist(trackId)
+		trackDataRes = append(trackDataRes, trackDatas...)
+		db.Save(&playlist)
+		for _, t := range trackDatas {
+			saveTrackData(t,db)
+		}
 	}
-	c.JSON(200, trackDatas)
+	c.JSON(200, trackDataRes)
 }
 
 func saveTrackData(t model.TrackData, db *gorm.DB) {
