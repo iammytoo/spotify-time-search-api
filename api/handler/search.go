@@ -2,6 +2,7 @@ package handler
 
 import (
 	"github.com/gin-gonic/gin"
+	"github.com/jinzhu/gorm"
 	"github.com/mirito333/spotify-time-search-api/api/connection"
 	"github.com/mirito333/spotify-time-search-api/api/model"
 )
@@ -11,6 +12,7 @@ func GetTrack(c *gin.Context) {
 	minTime := c.DefaultQuery("min_time", "0")
 	maxTime := c.DefaultQuery("max_time", "100000000")
 	category := c.DefaultQuery("category", "no")
+	around := c.Query("around")
 	db := connection.GetDB()
 	relation := db
 	if time != "" {
@@ -21,10 +23,15 @@ func GetTrack(c *gin.Context) {
 	}
 	if category != "no" {
 		genre := model.Genre{}
-		db.Where("`genre` = ?" ,category).First(&genre)
+		db.Where("`genre` = ?", category).First(&genre)
 		relation = relation.Table("tracks").Joins("join track_artists on `track_artists`.`track_id` = `tracks`.`id`")
-		relation = relation.Joins("join artist_genres on `track_artists`.`artist_id` = `artist_genres`.`artist_id`").Where("`artist_genres`.`genre_id` = ?" , genre.ID)
+		relation = relation.Joins("join artist_genres on `track_artists`.`artist_id` = `artist_genres`.`artist_id`").Where("`artist_genres`.`genre_id` = ?", genre.ID)
 	}
-	result := relation.Order("times desc").First(&model.Track{})
+	if around != "" {
+		relation = relation.Order(gorm.Expr("abs(`duration` - ?) asc", around)).Order("times desc")
+	} else {
+		relation = relation.Order("times desc")
+	}
+	result := relation.First(&model.Track{})
 	c.JSON(200, result)
 }
